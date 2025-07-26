@@ -1,78 +1,46 @@
-# Kepler's Gatekeeper — Exoplanet triage with ML 
-*End‑to‑end workflow turning Kepler light‑curve features into fast, reproducible exoplanet triage.*
+# Kepler’s Gatekeeper — Exoplanet candidate triage on Kepler KOIs
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jainam19/keplers-gatekeeper/blob/HEAD/notebooks/model.ipynb)
-<!-- CI badge (enable in Step 6)
-[![CI](https://github.com/jainam19/keplers-gatekeeper/actions/workflows/nbtest.yml/badge.svg)](https://github.com/jainam19/keplers-gatekeeper/actions)
--->
-
-## Results in 10 seconds
-- **Metric (LightGBM):** ROC‑AUC ≈ **0.97**, accuracy ≈ **0.90** (hold‑out).  
-- **So‑what:** Fewer false positives → reviewers spend time on real planets first.  
-- **Speed:** Prediction ≈ **0.05 s** for test split (fast triage).  
-*(Full details in `docs/FinalPaper.pdf`.)*
+A reproducible pipeline on the **Kepler exoplanet search results** (“cumulative.csv”, Kaggle: `nasa/kepler-exoplanet-search-results`) to classify **KOI disposition** from tabular features.  
+Focus: clear EDA, baseline → improved models, and transparent evaluation.
 
 ---
 
+## 1) Dataset
+- Source: Kepler KOI cumulative table (download instructions in `data/README_download.md`).
+- Target: `koi_disposition` (e.g., CANDIDATE / FALSE POSITIVE / CONFIRMED; converted to a binary classification for modeling).
+- Typical important fields observed: `koi_prad`, `koi_period`, `koi_depth`, `koi_score`, among others.
 
-<details>
-<summary><b>Data Analyst (DA)</b></summary>
+> This repo does **not** commit raw data; follow the data README to place `data/cumulative.csv`.
 
-- Clean EDA → Insights narrative in the notebook (`notebooks/model.ipynb`).
-- One key chart exported to `figs/key_plot.png`.
-- Clear “so‑what” bullets above for fast skim.
-</details>
+## 2) Method
+- **Preprocessing:** select numeric features, basic cleaning; train/validation split with a fixed random seed.
+- **Baselines:** Logistic Regression (reference), Random Forest (tree ensemble).
+- **Improved model:** LightGBM with a small grid search and k‑fold cross‑validation.
+- **Metrics:** ROC‑AUC (primary), accuracy/F1 (secondary). Class balance and error trade‑offs are noted in the notebook.
 
-<details>
-<summary><b>Data Engineer (DE)</b></summary>
+## 3) Results (reproducible on small sample)
+| Model                | ROC‑AUC | Accuracy | Notes                      |
+|----------------------|:------:|:--------:|----------------------------|
+| Logistic Regression  | ~0.94  | ~0.83    | Baseline linear model      |
+| Random Forest        | ~0.97  | ~0.89    | Ensemble, default tuning   |
+| LightGBM (tuned)     | ~0.97  | ~0.90    | Fast inference; small grid |
 
-- **Data contract:** `data/README_download.md` with exact steps (no raw data in git).
-- Pinned environment (`requirements.txt`) and sensible `.gitignore`.
-- CI workflow scaffold in `.github/workflows/nbtest.yml.disabled`.
-</details>
+> Numbers depend on split/seed and feature selection. See `notebooks/model.ipynb` for exact runs.
 
-<details>
-<summary><b>Data Scientist (DS)</b></summary>
-
-- Baseline (LogReg) → tree ensembles (RF, LightGBM) with k‑fold CV & grid search.
-- Feature importance & error‑aware metrics (AUC/F1/recall).
-- Top drivers (e.g., `koi_prad`, `koi_period`, `koi_depth`, `koi_score`). 
-</details>
-
-<details>
-<summary><b>ML Engineer (MLE)</b></summary>
-
-- Notebook runs on a small sample (<5 min) with a stable file path (`data/cumulative.csv`).
-- Ready for a tiny Streamlit app (threshold slider) in a follow‑up PR.
-- CI-ready (enable when data sample or synthetic generator is added).
-</details>
-
----
-
-## Quickstart
+## 4) Reproduce locally
 ```bash
-python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-jupyter lab  # or: jupyter notebook
+# Place data as data/cumulative.csv (see data/README_download.md)
+jupyter lab  # open notebooks/model.ipynb and "Restart & Run All"
 ```
 
-Open `notebooks/model.ipynb` and **Restart & Run All**.
+## 5) Notes & limitations
+- Kaggle data may be updated over time; this repo targets the public export at download time.
+- Model aims at triage (quick sorting), not final astrophysical confirmation.
+- No domain-specific vetting beyond the public KOI fields is included here.
 
-## Data
-Follow `data/README_download.md` to place `data/cumulative.csv`.  
-*(Do not commit Kaggle data; keep the repo lightweight.)*
+## 6) References
+Kaggle dataset: nasa/kepler-exoplanet-search-results
 
-## Docs
-- Your paper: [`docs/FinalPaper.pdf`](docs/FinalPaper.pdf)
-
-## Repo layout
-```
-/data/                      # raw data kept locally only; see data/README_download.md
-/figs/                      # exported plots (key_plot.png)
-/notebooks/model.ipynb      # main, cleaned notebook
-/src/                       # helpers (optional)
-/docs/FinalPaper.pdf        # authored write-up with full details
-.github/workflows/nbtest.yml.disabled  # CI scaffold (enable later)
-requirements.txt
-README.md
-```
+Libraries: scikit‑learn, LightGBM, pandas, numpy, matplotlib
