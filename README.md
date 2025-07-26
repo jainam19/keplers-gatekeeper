@@ -1,9 +1,9 @@
-# Kepler's Gatekeeper — Exoplanet triage with ML (DA · DE · DS · MLE)
+# Kepler's Gatekeeper — Exoplanet triage with ML 
 *End‑to‑end workflow turning Kepler light‑curve features into fast, reproducible exoplanet triage.*
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/<YOUR_GH_USER>/keplers-gatekeeper/blob/HEAD/notebooks/model.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jainam19/keplers-gatekeeper/blob/HEAD/notebooks/model.ipynb)
 <!-- CI badge (enable in Step 6)
-[![CI](https://github.com/<YOUR_GH_USER>/keplers-gatekeeper/actions/workflows/nbtest.yml/badge.svg)](https://github.com/<YOUR_GH_USER>/keplers-gatekeeper/actions)
+[![CI](https://github.com/jainam19/keplers-gatekeeper/actions/workflows/nbtest.yml/badge.svg)](https://github.com/jainam19/keplers-gatekeeper/actions)
 -->
 
 ## Results in 10 seconds
@@ -14,7 +14,7 @@
 
 ---
 
-## What this shows for different roles
+
 <details>
 <summary><b>Data Analyst (DA)</b></summary>
 
