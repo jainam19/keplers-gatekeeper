@@ -1,0 +1,15 @@
+# Data
+data/*
+!data/README_download.md
+
+# Notebooks
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
