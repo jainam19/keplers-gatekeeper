@@ -34,13 +34,22 @@ pip install -r requirements.txt
 # Place data as data/cumulative.csv (see data/README_download.md)
 jupyter lab  # open notebooks/model.ipynb and "Restart & Run All"
 ```
-
-## 5) Notes & limitations
+## 5) Repository Layout
+```bash
+/data/                      # not committed; see data/README_download.md
+/figs/                      # exported plots 
+/notebooks/model.ipynb      # main notebook (EDA → model → evaluation)
+/src/                       # helpers
+/docs/FinalPaper.pdf        # authored write-up
+.github/workflows/          # CI 
+requirements.txt
+```
+## 6) Notes & limitations
 - Kaggle data may be updated over time; this repo targets the public export at download time.
 - Model aims at triage (quick sorting), not final astrophysical confirmation.
 - No domain-specific vetting beyond the public KOI fields is included here.
 
-## 6) References
+## 7) References
 Kaggle dataset: nasa/kepler-exoplanet-search-results
 
 Libraries: scikit‑learn, LightGBM, pandas, numpy, matplotlib
